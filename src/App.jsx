@@ -7,7 +7,14 @@ import AddExpenseModal from './components/AddExpenseModal';
 
 function App() {
 	const [showAddBudgetModal, setShowAddBudgetModal] = useState(false);
+	const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
+	const [addExpenseModalBudgetId, setAddExpenseModalBudgetId] = useState();
 	const { budgets, getBudgetExpenses } = useBudgets();
+
+	function openAddExpenseModal(budgetId) {
+		setShowAddExpenseModal(true);
+		setAddExpenseModalBudgetId(budgetId);
+	}
 
 	return (
 		<>
@@ -17,7 +24,7 @@ function App() {
 					<Button variant="primary" onClick={() => setShowAddBudgetModal(true)}>
 						Add Budget
 					</Button>
-					<Button variant="primary" onClick={() => setShowAddBudgetModal(true)}>
+					<Button variant="primary" onClick={openAddExpenseModal}>
 						Add Expense
 					</Button>
 				</Stack>
@@ -40,7 +47,9 @@ function App() {
 								name={budget.name}
 								gray
 								amount={amount}
-								max={budget.max}></BudgetCard>
+								max={budget.max}
+								onAddExpenseClick={() => openAddExpenseModal(budget.id)}
+								/>
 						);
 					})}
 				</div>
@@ -50,8 +59,9 @@ function App() {
 				handleClose={() => setShowAddBudgetModal(false)}
 			/>
 			<AddExpenseModal
-				show={showAddBudgetModal}
-				handleClose={() => setShowAddBudgetModal(false)}
+				show={showAddExpenseModal}
+				defaultBudgetId={addExpenseModalBudgetId}
+				handleClose={() => setShowAddExpenseModal(false)}
 			/>
 		</>
 	);
